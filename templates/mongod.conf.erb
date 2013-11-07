@@ -7,6 +7,8 @@ pidfilepath=<%= scope.lookupvar('mongodb::params::dbdir') %>/mongod_<%= @mongod_
 
 # logpath=<%= scope.lookupvar('mongodb::params::logdir') %>/mongod_<%= @mongod_instance %>.log
 syslog
+auditLog=textfile
+auditPath=<%= scope.lookupvar('mongodb::params::dbdir') %>/mongod_<%= @mongod_instance %>_audit.log
 
 logappend=<%= @mongod_logappend %>
 
