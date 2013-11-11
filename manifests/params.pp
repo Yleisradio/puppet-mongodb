@@ -1,7 +1,8 @@
 # == Class: mongodb::params
 #
 class mongodb::params (
-    $dbdir = '/var/lib'
+    $dbdir = '/var/lib',
+    $version = '2.4.8'
 ){
 
     $repo_class = $::osfamily ? {
@@ -33,6 +34,9 @@ class mongodb::params (
         debian  => 'mongodb',
         redhat  => 'mongod',
     }
+
+    $installdir = '/usr/lib/mongodb'
+
 
     # directorypath to store db directory in
     # subdirectories for each mongo instance will be created
