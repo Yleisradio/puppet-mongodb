@@ -22,38 +22,17 @@ class mongodb inherits mongodb::params {
         }
     }
 
-    # stop and disable default mongod
 
-    service {
-        [$::mongodb::params::old_servicename]:
-            ensure     => stopped,
-            enable     => false,
-            hasstatus  => true,
-            hasrestart => true,
-            subscribe  => Package['mongodb-10gen'],
-            before     => Anchor['mongodb::end'],
+    mongodb::limits::conf {
+        'mongod-soft':
+          type  => soft,
+          item  => nofile,
+          value => $mongodb::params::ulimit_nofiles;
+        'mongod-hard':
+          type  => hard,
+          item  => nofile,
+          value => $mongodb::params::ulimit_nofiles;
     }
-
-    # remove not wanted startup script, because it would kill all mongod
-    # instances and not only the default mongod
-
-    file {
-        "/etc/init.d/${::mongodb::params::old_servicename}":
-            ensure  => absent,
-            require => Service[$::mongodb::params::old_servicename],
-            before  => Anchor['mongodb::end'],
-    }
-
-  mongodb::limits::conf {
-    'mongod-soft':
-      type  => soft,
-      item  => nofile,
-      value => $mongodb::params::ulimit_nofiles;
-    'mongod-hard':
-      type  => hard,
-      item  => nofile,
-      value => $mongodb::params::ulimit_nofiles;
-  }
 
 }
 
