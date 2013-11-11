@@ -7,7 +7,7 @@ class mongodb::repos::apt {
             release     => 'dist',
             repos       => '10gen',
             key         => '7F0CEB10',
-            key_server  => 'keyserver.ubuntu.com',
+            key_server  => 'hkp://keyserver.ubuntu.com:80',
             include_src => false,
     }
 

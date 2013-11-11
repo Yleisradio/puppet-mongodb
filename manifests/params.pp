@@ -1,6 +1,8 @@
 # == Class: mongodb::params
 #
-class mongodb::params {
+class mongodb::params (
+    $dbdir = '/var/lib'
+){
 
     $repo_class = $::osfamily ? {
         redhat => 'mongodb::repos::yum',
@@ -34,8 +36,7 @@ class mongodb::params {
 
     # directorypath to store db directory in
     # subdirectories for each mongo instance will be created
-
-    $dbdir = '/var/lib'
+    # $dbdir = '/var/lib'
 
     # numbers of files (days) to keep by logrotate
 
