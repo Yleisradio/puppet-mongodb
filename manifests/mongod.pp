@@ -58,11 +58,8 @@ define mongodb::mongod (
         enable     => $mongod_enable,
         hasstatus  => true,
         hasrestart => true,
-        require    => [
-            File["/etc/mongod_${mongod_instance}.conf", "/etc/init.d/mongod_${mongod_instance}"],
-            Service[$::mongodb::params::old_servicename]
-            ],
-            before => Anchor['mongodb::end']
+        require    => [File["/etc/mongod_${mongod_instance}.conf", "/etc/init.d/mongod_${mongod_instance}"]],
+        before => Anchor['mongodb::end']
     }
 
 }
