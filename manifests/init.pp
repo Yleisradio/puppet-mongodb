@@ -6,11 +6,8 @@ class mongodb inherits mongodb::params {
         before => Anchor['mongodb::install::begin'],
     }
 
-    anchor { 'mongodb::end': }
-
-    class { 'mongodb::logrotate':
+    anchor { 'mongodb::end':
         require => Anchor['mongodb::install::end'],
-        before  => Anchor['mongodb::end'],
     }
 
     case $::osfamily {

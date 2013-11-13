@@ -17,27 +17,76 @@ define mongodb::mongod (
     $mongod_add_options = ''
 ) {
 
-    $serviceConf = {
+    $homedir = "${mongodb::params::homedir}/${mongod_instance}"
+    $datadir = "${homedir}/data"
+    $logdir  = "${homedir}/log"
+
+    $conf = {
         user        => $mongodb::params::run_as_user,
-        dbdir       => $mongodb::params::dbdir,
-        config_file => "/etc/mongod_${mongod_instance}.conf"
+        homedir     => $homedir,
+        datadir     => $datadir,
+        logdir      => $logdir,
+        configfile  => "/etc/mongod_${mongod_instance}.conf"
     }
+
+    anchor { "mongod::${mongod_instance}::files": }
 
     file {
         "/etc/mongod_${mongod_instance}.conf":
             content => template('mongodb/mongod.conf.erb'),
-            mode    => '0755',
+            mode    => '0644',
             # no auto restart of a db because of a config change
             #notify => Class['mongodb::service'],
-            require => Class['mongodb::install'];
+            require => Anchor['mongodb::install::end'],
+            before  => Anchor["mongod::${mongod_instance}::files"];
 
         "/etc/init/mongod_${mongod_instance}.conf":
             content => template('mongodb/mongod_upstart.conf.erb'),
+            mode    => '0644',
+            require => Anchor['mongodb::install::end'],
+            before  => Anchor["mongod::${mongod_instance}::files"];
+
+        "${homedir}":
+            ensure  => directory,
             mode    => '0755',
-            require => Class['mongodb::install'],
+            owner   => $mongodb::params::run_as_user,
+            group   => $mongodb::params::run_as_group,
+            require => Anchor['mongodb::install::end'];
+
+        "${datadir}":
+            ensure  => directory,
+            mode    => '0755',
+            owner   => $mongodb::params::run_as_user,
+            group   => $mongodb::params::run_as_group,
+            require => File["${homedir}"],
+            before  => Anchor["mongod::${mongod_instance}::files"];
+
+        "${logdir}":
+            ensure  => directory,
+            mode    => '0755',
+            owner   => $mongodb::params::run_as_user,
+            group   => $mongodb::params::run_as_group,
+            require => File["${homedir}"],
+            before  => Anchor["mongod::${mongod_instance}::files"];
     }
 
+    mongodb::logrotate { "mongod_${mongod_instance}_logrotate":
+        instance => $mongod_instance,
+        logdir   => $logdir
+    }
+
+    service { "mongod_${mongod_instance}":
+        ensure     => $mongod_running,
+        enable     => $mongod_enable,
+        hasstatus  => true,
+        hasrestart => true,
+        require    => Anchor["mongod::${mongod_instance}::files"],
+        before     => Anchor['mongodb::end']
+    }
+
+
     if ($mongod_monit != false){
+        # ATTENTION: propably not working!!
         #notify { "mongod_monit is : ${mongod_monit}": }
         class { 'mongodb::monit':
             instance_name => $mongod_instance,
@@ -48,22 +97,15 @@ define mongodb::mongod (
     }
 
     if ($mongod_useauth != false){
+        # ATTENTION: propably not working!!
         file { "/etc/mongod_${mongod_instance}.key":
             content => template('mongodb/mongod.key.erb'),
             mode    => '0700',
             owner   => $mongodb::params::run_as_user,
-            require => Class['mongodb::install'],
+            require => Anchor['mongodb::install::end'],
             notify  => Service["mongod_${mongod_instance}"],
         }
     }
 
-    service { "mongod_${mongod_instance}":
-        ensure     => $mongod_running,
-        enable     => $mongod_enable,
-        hasstatus  => true,
-        hasrestart => true,
-        require    => [File["/etc/mongod_${mongod_instance}.conf", "/etc/init/mongod_${mongod_instance}.conf"]],
-        before => Anchor['mongodb::end']
-    }
 
 }

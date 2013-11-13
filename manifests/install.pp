@@ -3,6 +3,13 @@
 #
 class mongodb::install {
 
+    $repo_class = $::osfamily ? {
+        debian => mongodb::repos::apt,
+        redhat => mongodb::repos::yum,
+    }
+
+    include $repo_class
+
     anchor { 'mongodb::install::begin': }
     anchor { 'mongodb::install::end': }
 
@@ -13,51 +20,37 @@ class mongodb::install {
         before  => Anchor['mongodb::install::end']
     }
 
-    package { 'curl':
-        name    => 'curl',
+    user { "${mongodb::params::run_as_user}":
+        comment  => "MongoDB user",
+        ensure   => present,
+        require  => Anchor['mongodb::install::begin'],
+        before  => Anchor['mongodb::install::end']
+    }
+
+    group { "${mongodb::params::run_as_group}":
+        ensure   => present,
+        require  => Anchor['mongodb::install::begin'],
+        before  => Anchor['mongodb::install::end']
+    }
+
+    file { '/etc/default/mongodb':
+        content => 'ENABLE_MONGODB=NO',
         ensure  => present,
         require => Anchor['mongodb::install::begin']
     }
 
-    user{ "${mongodb::params::run_as_user}":
-        comment  => "MongoDB user",
-        ensure   => present,
-        require  => Anchor['mongodb::install::begin']
-    }
-    group { "${mongodb::params::run_as_group}":
-        ensure   => present,
-        require  => Anchor['mongodb::install::begin']
-    }
-    file { "$mongodb::params::logdir":
-        ensure   => directory,
-        mode     => '0755',
-        owner    => $mongodb::params::run_as_user,
-        group    => $mongodb::params::run_as_group,
-        require  => [User[$mongodb::params::run_as_user], Group[$mongodb::params::run_as_user]]
-    }
-    file { "$mongodb::params::dbdir":
-        ensure   => directory,
-        mode     => '0755',             # TODO: more restricted permissons
-        owner    => $mongodb::params::run_as_user,
-        group    => $mongodb::params::run_as_group,
-        require  => [User[$mongodb::params::run_as_user], Group[$mongodb::params::run_as_user]]
+    file { "${mongodb::params::homedir}":
+        ensure  => directory,
+        mode    => 755,
+        owner   => $mongodb::params::run_as_user,
+        group   => $mongodb::params::run_as_group,
+        require => Anchor['mongodb::install::begin'],
+        before  => Anchor['mongodb::install::end']
     }
 
-    $installConf = {
-        user     => $mongodb::params::run_as_user,
-        group    => $mongodb::params::run_as_group,
-        version  => $mongodb::params::version,
-        home     => $mongodb::params::installdir
+    package { 'mongodb-10gen':
+        ensure => $mongodb::params::version,
+        require => [File['/etc/default/mongodb'], Package['mongodb-stable'], Class[$repo_class]],
+        before => Anchor['mongodb::install::end']
     }
-    file { '/tmp/install-mongo.sh':
-        mode     => '0755',
-        content  => template('mongodb/install-mongo.sh.erb')
-    }
-    exec { 'install-mongo':
-        command  => "/tmp/install-mongo.sh",
-        path     => ["/bin", "/usr/bin"],
-        require  => [Package['curl'], File['/tmp/install-mongo.sh', $mongodb::params::logdir, $mongodb::params::dbdir]],
-        before   => Anchor['mongodb::install::end']
-    }
-
 }

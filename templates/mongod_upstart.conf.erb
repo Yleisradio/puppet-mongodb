@@ -1,18 +1,19 @@
-# Ubuntu upstart file at /etc/init/mongodb.conf
+# Ubuntu upstart file at /etc/init/mongod_<%= @mongod_instance %>.conf
 
 start on runlevel [2345]
 stop on runlevel [06]
 
-DBDIR=<%= serviceConf['dbdir'] %>
-DBUSER=<%= serviceConf['user'] %>
-CONFIG_FILE=<%= serviceConf['config_file'] %>
-
 script
 
-  if [ -f $DBDIR/mongod.lock ]; then
-          rm $DBDIR/mongod.lock
+  HOMEDIR=<%= @conf['homedir'] %>
+  DBUSER=<%= @conf['user'] %>
+  CONFIG_FILE=<%= @conf['configfile'] %>
+
+
+  if [ -f $HOMEDIR/mongod.lock ]; then
+          rm $HOMEDIR/mongod.lock
           sudo -u $DBUSER /usr/bin/mongod --config $CONFIG_FILE --repair
   fi
-  exec start-stop-daemon --start --quiet --chuid $DBUSER --exec  /usr/bin/mongod -- --config $CONFIG_FILE
+  exec start-stop-daemon --start --quiet --pidfile $HOMEDIR/mongo.pid --chuid $DBUSER --exec  /usr/bin/mongod -- --config $CONFIG_FILE
 
 end script

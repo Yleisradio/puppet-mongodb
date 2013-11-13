@@ -1,9 +1,6 @@
 # == Class: mongodb::params
 #
-class mongodb::params (
-    $dbdir = '/var/lib',
-    $version = '2.4.8'
-){
+class mongodb::params {
 
     $repo_class = $::osfamily ? {
         redhat => 'mongodb::repos::yum',
@@ -35,8 +32,7 @@ class mongodb::params (
         redhat  => 'mongod',
     }
 
-    $installdir = '/usr/lib/mongodb'
-
+    $version = '2.4.8'
 
     # directorypath to store db directory in
     # subdirectories for each mongo instance will be created
@@ -45,6 +41,8 @@ class mongodb::params (
     # numbers of files (days) to keep by logrotate
 
     $logrotatenumber = 7
+
+    $homedir = "/opt/mongodb"
 
     # directory for mongo logfiles
 
