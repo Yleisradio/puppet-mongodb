@@ -16,6 +16,13 @@ define mongodb::mongod (
     $mongod_monit = false,
     $mongod_add_options = ''
 ) {
+
+    $serviceConf = {
+        user        => $mongodb::params::run_as_user,
+        dbdir       => $mongodb::params::dbdir,
+        config_file => "/etc/mongod_${mongod_instance}.conf"
+    }
+
     file {
         "/etc/mongod_${mongod_instance}.conf":
             content => template('mongodb/mongod.conf.erb'),
@@ -24,11 +31,8 @@ define mongodb::mongod (
             #notify => Class['mongodb::service'],
             require => Class['mongodb::install'];
 
-        "/etc/init.d/mongod_${mongod_instance}":
-            content => $::osfamily ? {
-                debian => template('mongodb/debian_mongod-init.conf.erb'),
-                redhat => template('mongodb/redhat_mongod-init.conf.erb'),
-            },
+        "/etc/init/mongod_${mongod_instance}.conf":
+            content => template('mongodb/mongod_upstart.conf.erb'),
             mode    => '0755',
             require => Class['mongodb::install'],
     }
@@ -58,7 +62,7 @@ define mongodb::mongod (
         enable     => $mongod_enable,
         hasstatus  => true,
         hasrestart => true,
-        require    => [File["/etc/mongod_${mongod_instance}.conf", "/etc/init.d/mongod_${mongod_instance}"]],
+        require    => [File["/etc/mongod_${mongod_instance}.conf", "/etc/init/mongod_${mongod_instance}.conf"]],
         before => Anchor['mongodb::end']
     }
 
