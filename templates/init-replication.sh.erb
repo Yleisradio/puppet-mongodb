@@ -1,0 +1,18 @@
+#!/bin/sh
+
+mongo localhost/<%= @replica_set_name %> --eval "hosts = [<%= @replica_set_hosts.map { |i| "'" + i.to_s + "'" }.join(",") %>];
+
+for (members = [], i = 0; i < hosts.length; i++) {
+  members[i] = {_id: i, host: hosts[i]}
+}
+
+config = {
+  _id: '<%= @replica_set_name %>',
+  members: members
+}
+
+result = rs.initiate(config)
+printjson(result)"
+
+mongo localhost/<%= @replica_set_name %> --eval "printjson(rs.status())"
+
