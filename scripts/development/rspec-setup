@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-bundle exec rspec-puppet-init --verbose
+bundle exec rspec-puppet-init
 
 cd spec/fixtures/modules
 for i in apt stdlib; do ln -sv ../../../modules/$i $i; done
