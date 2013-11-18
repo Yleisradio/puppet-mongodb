@@ -5,3 +5,6 @@ rvm:
 before_script:
   - scripts/development/install
   - scripts/development/rspec-setup
+notifications:
+  flowdock:
+    secure: XusZTvhYpdmKiCEvZ8JNgBILUsb6S8/Re670C2kvFTobXXHtlLjvjon4ar3XFMs2/EgJFgfDvSUOG39oSMS599hG4hw4JHoevBrDvK7lngdaYgMFwhkIIEYqU9qsggpM3Lam+hj1pnkA7bdDZzIdCl/eYni+ETuCA+tDDXUX3Ac=
