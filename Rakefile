@@ -26,3 +26,5 @@ begin
   end
 rescue Gem::LoadError
 end
+
+task :test => :rspec
