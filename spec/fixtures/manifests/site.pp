@@ -1,6 +1,5 @@
 node 'sample.org' {
   class {'mongodb::params':
-    dbdir => '/data'
   }
 
   include ::mongodb
