@@ -9,4 +9,5 @@ group :test do
   gem "puppet-lint"
   # REVIEW: OnTheEdgeHere - See: https://github.com/rodjek/rspec-puppet/issues/56
   gem "rspec-puppet", :git => "https://github.com/rodjek/rspec-puppet.git"
+  gem "librarian-puppet"
 end
