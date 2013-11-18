@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+bundle exec librarian-puppet install --verbose
