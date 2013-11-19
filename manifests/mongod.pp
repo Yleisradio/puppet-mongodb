@@ -17,6 +17,9 @@ define mongodb::mongod (
     $mongod_add_options = ''
 ) {
 
+    # REVIEW: if not included specs won't get variables from the class, exp: $mongodb::params::homedir = null
+    include mongodb::params
+
     $homedir = "${mongodb::params::homedir}/${mongod_instance}"
     $datadir = "${homedir}/data"
     $logdir  = "${homedir}/log"
