@@ -10,6 +10,8 @@ describe "mongodb::mongod", :type => :define do
     }
   end
 
+  it { should contain_anchor("mongod::instance_name::files") }
+
   it do
     should contain_file("/etc/mongod_instance_name.conf")
       .with(
@@ -33,7 +35,6 @@ describe "mongodb::mongod", :type => :define do
         :group => "mongodb"
       )
   end
-
 
   it do
     should contain_file("/opt/mongodb/instance_name/data")
