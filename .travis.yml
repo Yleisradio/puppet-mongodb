@@ -1,10 +1,14 @@
 language: ruby
+env:
+  - PUPPET_VERSION=3.3.1
+  - PUPPET_VERSION=3.3.2
 rvm:
   - 1.9.3
   - 2.0.0
 before_script:
   - scripts/development/install
   - scripts/development/rspec-setup
+gemfile: Gemfile
 notifications:
   flowdock:
     secure: XusZTvhYpdmKiCEvZ8JNgBILUsb6S8/Re670C2kvFTobXXHtlLjvjon4ar3XFMs2/EgJFgfDvSUOG39oSMS599hG4hw4JHoevBrDvK7lngdaYgMFwhkIIEYqU9qsggpM3Lam+hj1pnkA7bdDZzIdCl/eYni+ETuCA+tDDXUX3Ac=
