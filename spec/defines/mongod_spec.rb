@@ -24,5 +24,6 @@ describe "mongodb::mongod", :type => :define do
       )
   end
 
+  it { should contain_mongodb__logrotate("mongod_instance_name_logrotate") }
   it { should contain_service("mongod_instance_name") }
 end
