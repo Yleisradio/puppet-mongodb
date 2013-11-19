@@ -20,28 +20,28 @@ class mongodb::install {
         before  => Anchor['mongodb::install::end']
     }
 
-    user { "${mongodb::params::run_as_user}":
-        comment  => "MongoDB user",
+    user { $mongodb::params::run_as_user:
         ensure   => present,
+        comment  => 'MongoDB user',
         require  => Anchor['mongodb::install::begin'],
-        before  => Anchor['mongodb::install::end']
+        before   => Anchor['mongodb::install::end']
     }
 
-    group { "${mongodb::params::run_as_group}":
+    group { $mongodb::params::run_as_group:
         ensure   => present,
         require  => Anchor['mongodb::install::begin'],
-        before  => Anchor['mongodb::install::end']
+        before   => Anchor['mongodb::install::end']
     }
 
     file { '/etc/default/mongodb':
-        content => 'ENABLE_MONGODB=NO',
         ensure  => present,
+        content => 'ENABLE_MONGODB=NO',
         require => Anchor['mongodb::install::begin']
     }
 
-    file { "${mongodb::params::homedir}":
+    file { $mongodb::params::homedir:
         ensure  => directory,
-        mode    => 755,
+        mode    => '0755',
         owner   => $mongodb::params::run_as_user,
         group   => $mongodb::params::run_as_group,
         require => Anchor['mongodb::install::begin'],
@@ -49,8 +49,12 @@ class mongodb::install {
     }
 
     package { 'mongodb-10gen':
-        ensure => $mongodb::params::version,
-        require => [File['/etc/default/mongodb'], Package['mongodb-stable'], Class[$repo_class]],
-        before => Anchor['mongodb::install::end']
+        ensure  => $mongodb::params::version,
+        require => [
+            File['/etc/default/mongodb'],
+            Package['mongodb-stable'],
+            Class[$repo_class]
+        ],
+        before  => Anchor['mongodb::install::end']
     }
 }
