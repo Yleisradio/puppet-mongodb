@@ -7,6 +7,7 @@ define mongodb::replication::script (
   $replica_set_hosts = [],
 ) {
 
+  include mongodb::params
 
   file {
     "${::mongodb::params::homedir}/commands":
