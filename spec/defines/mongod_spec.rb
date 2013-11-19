@@ -10,12 +10,19 @@ describe "mongodb::mongod", :type => :define do
     }
   end
 
-  it { should contain_file("/etc/mongod_instance_name.conf") }
-  it { should contain_service("mongod_instance_name") }
+  it do
+    should contain_file("/etc/mongod_instance_name.conf")
+      .with(
+        :mode => '0644'
+      )
+  end
+
   it do
     should contain_file("/etc/init/mongod_instance_name.conf")
       .with(
         :mode => '0644'
       )
   end
+
+  it { should contain_service("mongod_instance_name") }
 end
