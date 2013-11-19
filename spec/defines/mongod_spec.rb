@@ -24,9 +24,19 @@ describe "mongodb::mongod", :type => :define do
       )
   end
 
-
   it do
     should contain_file("/opt/mongodb/instance_name")
+      .with(
+        :ensure => "directory",
+        :mode => "0755",
+        :owner => "mongodb",
+        :group => "mongodb"
+      )
+  end
+
+
+  it do
+    should contain_file("/opt/mongodb/instance_name/data")
       .with(
         :ensure => "directory",
         :mode => "0755",
