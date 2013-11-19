@@ -9,18 +9,18 @@ define mongodb::replication::script (
 
   include mongodb::params
 
+  File {
+    owner   => $mongodb::params::run_as_user,
+    group   => $mongodb::params::run_as_group,
+    mode    => '0755',
+  }
+
   file {
     "${::mongodb::params::homedir}/commands":
       ensure  => 'directory',
-      owner   => $mongodb::params::run_as_user,
-      group   => $mongodb::params::run_as_group,
-      mode    => '0755',
       require => Anchor['mongodb::install::end'];
 
     "${::mongodb::params::homedir}/commands/init-replication-${replica_set_name}.sh":
-      owner   => $mongodb::params::run_as_user,
-      group   => $mongodb::params::run_as_group,
-      mode    => '0755',
       require => File["${::mongodb::params::homedir}/commands"],
       content => template('mongodb/init-replication.sh.erb');
   }
