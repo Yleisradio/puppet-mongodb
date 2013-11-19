@@ -24,15 +24,26 @@ describe "mongodb::mongod", :type => :define do
       )
   end
 
+
   it do
-    should contain_file("/opt/mongodb/instance_name/log")
+    should contain_file("/opt/mongodb/instance_name")
       .with(
+        :ensure => "directory",
         :mode => "0755",
         :owner => "mongodb",
         :group => "mongodb"
       )
   end
 
+  it do
+    should contain_file("/opt/mongodb/instance_name/log")
+      .with(
+        :ensure => "directory",
+        :mode => "0755",
+        :owner => "mongodb",
+        :group => "mongodb"
+      )
+  end
 
   it do
     should contain_mongodb__logrotate("mongod_instance_name_logrotate")
