@@ -1,0 +1,27 @@
+#!/bin/sh
+mongo localhost/<%= @replica_set_name %> --eval "hosts = [<%= @replica_set_hosts.map { |i| "'" + i.to_s + "'" }.join(",") %>];
+
+for (members = [], i = 0; i < hosts.length; i++) {
+  members[i] = {_id: i, host: hosts[i]}
+}
+
+backuphosts = [<%= @replica_set_backuphosts.map { |i| "'" + i.to_s + "'" }.join(",") %>];
+for (i = 0; i < backuphosts.length; i++) {
+  	members[i + hosts.length] = {_id: i + hosts.length, host: backuphosts[i],priority : 0,hidden : true}
+	}
+}
+
+config = {
+  _id: '<%= @replica_set_name %>',
+  members: members
+}
+
+result = rs.initiate(config)
+printjson(result)"
+
+mongo localhost/<%= @replica_set_name %> --eval "printjson(rs.status())"
+
+# To add manually backup nodes to replication set. Run these on primary node
+# <% @replica_set_backuphosts.to_enum.with_index.each do |host,i| %>
+# rs.add({_id: <%=(i + @replica_set_hosts.size()).to_s %>, host: '<%=host.to_s %>', priority : 0, hidden : true})
+<% end %>

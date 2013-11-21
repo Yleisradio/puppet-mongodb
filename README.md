@@ -68,6 +68,21 @@ puppet > 2.6.2
 	}
 </pre>
 
+## Add backup node to replica set 
+This will set up hidden replicate set member and add cron job to take mongodump on every 6 hours. 
+Backups will be aggregated as daily, weekly and monthly.
+<pre>
+node mongod-backup.my.domain {
+  class { mongodb::service::backup:
+    instance_name     => "myReplicaSet",
+    replica_set_name  => "myReplicaSet",
+    replica_set_hosts => ['10.0.0.1:27017','10.0.0.3:27017','10.0.0.3:27017'],
+    replica_set_backuphosts => ['10.0.0.4:27017'],
+    backup_dir => "/opt/backups" // optional, default to /opt/mongo_backups
+  }
+}
+</pre>
+
 ## More complex building of mongo sharding cluster ###
 4 nodes (3 of them config server) with 4 shards in replecation
 
