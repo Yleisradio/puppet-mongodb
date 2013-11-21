@@ -7,7 +7,6 @@ define mongodb::backup::job (
   $replica_set_backuphosts = [],
   $backupdir = ""
 ) {
-  
 
   file {
     "${::mongodb::params::homedir}/backup":
@@ -38,8 +37,8 @@ define mongodb::backup::job (
     ensure  => 'present',
     user    => $mongodb::params::run_as_user,
     command => "${::mongodb::params::homedir}/backup/run-${replica_set_name}-backup.sh",
-    hour => [ 6, 12, 18, 0 ], 
-    minute => '00', 
+    hour => [ 6, 12, 18, 0 ],
+    minute => '00',
   }
 
 
