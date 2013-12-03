@@ -1,7 +1,12 @@
 # Class: mongodb::service::cluster
 #
 #
-class mongodb::service::cluster ($instance_name, $replica_set_name, $replica_set_hosts) {
+class mongodb::service::cluster (
+  $instance_name,
+  $replica_set_name,
+  $replica_set_hosts,
+  $mongodb_options = [],
+) {
   include ::mongodb
 
   # http://docs.mongodb.org/master/reference/configuration-options/
@@ -10,7 +15,7 @@ class mongodb::service::cluster ($instance_name, $replica_set_name, $replica_set
       mongod_instance    => $instance_name,
       mongod_replSet     => $replica_set_name,
       mongod_port        => 27017,
-      mongod_add_options => ["diaglog=1"],
+      mongod_add_options => $mongodb_options,
       mongod_monit       => false,
   }
 
