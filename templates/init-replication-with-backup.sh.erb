@@ -6,9 +6,9 @@ for (members = [], i = 0; i < hosts.length; i++) {
 }
 
 backuphosts = [<%= @replica_set_backuphosts.map { |i| "'" + i.to_s + "'" }.join(",") %>];
+
 for (i = 0; i < backuphosts.length; i++) {
-  	members[i + hosts.length] = {_id: i + hosts.length, host: backuphosts[i],priority : 0,hidden : true}
-	}
+  members[i + hosts.length] = {_id: i + hosts.length, host: backuphosts[i],priority : 0,hidden : true}
 }
 
 config = {
