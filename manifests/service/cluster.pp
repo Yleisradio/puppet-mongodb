@@ -17,6 +17,7 @@ class mongodb::service::cluster (
       mongod_port        => 27017,
       mongod_add_options => $mongodb_options,
       mongod_monit       => false,
+      mongod_fork       => false,
   }
 
   mongodb::replication::script { 'init-replica-set':
