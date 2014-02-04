@@ -83,7 +83,9 @@ define mongodb::mongod (
         enable     => $mongod_enable,
         hasstatus  => true,
         hasrestart => true,
+        provider   => 'upstart',
         require    => Anchor["mongod::${mongod_instance}::files"],
+        subscribe  => Anchor["mongod::${mongod_instance}::files"],
         before     => Anchor['mongodb::end']
     }
 
