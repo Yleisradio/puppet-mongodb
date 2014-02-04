@@ -1,9 +1,16 @@
 # Ubuntu upstart file at /etc/init/mongod_<%= @mongod_instance %>.conf
 
 start on runlevel [2345]
-stop on runlevel [06]
+stop on runlevel [016]
 
 limit nofile 64000 64000
+
+respawn
+respawn limit 5 10
+
+console log
+
+setuid <%= @conf['user'] %>
 
 script
 
