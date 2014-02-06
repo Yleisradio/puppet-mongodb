@@ -12,6 +12,7 @@ class mongodb::service::backup ($instance_name, $replica_set_name, $replica_set_
       mongod_port        => 27017,
       mongod_add_options => ["diaglog=1"],
       mongod_monit       => false,
+      mongod_fork       => false,
   }
 
   mongodb::replication::backup-init-script { 'init-replica-set-with-backup':
