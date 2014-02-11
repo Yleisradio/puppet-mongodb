@@ -10,7 +10,7 @@ describe "mongodb::service::backup", :type => :class do
         :replica_set_name        => "replica_set_name",
         :replica_set_hosts       => ["192.168.10.11", "192.168.10.12", "192.168.10.13"],
         :replica_set_backuphosts => ["192.168.10.14"],
-        :backup_dir              => '/mongodb_backup/backup',
+        :backup_dir              => "/mongodb_backup/backup",
       }
     end
 
@@ -26,12 +26,12 @@ describe "mongodb::service::backup", :type => :class do
     end
 
     it do
-      should contain_mongodb__backup__job('automongobackup')
+      should contain_mongodb__backup__job("automongobackup")
         .with(
           :replica_set_hosts => ["192.168.10.11", "192.168.10.12", "192.168.10.13"],
           :replica_set_backuphosts => "192.168.10.14",
           :replica_set_name  => "replica_set_name",
-          :backupdir => '/mongodb_backup/backup',
+          :backupdir => "/mongodb_backup/backup",
           :database_name => "replica_set_name"
         )
     end
@@ -47,7 +47,7 @@ describe "mongodb::service::backup", :type => :class do
         :replica_set_name        => "replica_set_name",
         :replica_set_hosts       => ["192.168.10.11", "192.168.10.12", "192.168.10.13"],
         :replica_set_backuphosts => ["192.168.10.14"],
-        :backup_dir              => '/mongodb_backup/backup',
+        :backup_dir              => "/mongodb_backup/backup",
         :database_name           => "database_name"
       }
     end
@@ -64,12 +64,12 @@ describe "mongodb::service::backup", :type => :class do
     end
 
     it do
-      should contain_mongodb__backup__job('automongobackup')
+      should contain_mongodb__backup__job("automongobackup")
         .with(
           :replica_set_hosts => ["192.168.10.11", "192.168.10.12", "192.168.10.13"],
           :replica_set_backuphosts => "192.168.10.14",
           :replica_set_name  => "replica_set_name",
-          :backupdir => '/mongodb_backup/backup',
+          :backupdir => "/mongodb_backup/backup",
           :database_name => "database_name"
         )
     end

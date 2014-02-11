@@ -27,7 +27,7 @@ class mongodb::service::backup (
       mongod_port        => 27017,
       mongod_add_options => $mongodb_options,
       mongod_monit       => false,
-      mongod_fork       => false,
+      mongod_fork        => false,
   }
 
 
@@ -43,7 +43,7 @@ class mongodb::service::backup (
       replica_set_backuphosts => $replica_set_backuphosts,
       replica_set_name  => $replica_set_name,
       backupdir => $backup_dir,
-      database_name => $backup_database_name
+      database_name => $backup_database_name,
   }
 
 }
