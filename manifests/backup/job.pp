@@ -5,7 +5,8 @@ define mongodb::backup::job (
   $replica_set_name = '',
   $replica_set_hosts = [],
   $replica_set_backuphosts = [],
-  $backupdir = ""
+  $backupdir = "",
+  $database_name = "",
 ) {
 
   file {
