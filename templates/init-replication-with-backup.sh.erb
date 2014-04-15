@@ -1,5 +1,5 @@
 #!/bin/sh
-mongo localhost/<%= @replica_set_name %> --eval "hosts = [<%= @replica_set_hosts.map { |i| "'" + i.to_s + "'" }.join(",") %>];
+mongo <%= @replica_set_hosts[0]%>/<%= @replica_set_name %> --eval "hosts = [<%= @replica_set_hosts.map { |i| "'" + i.to_s + "'" }.join(",") %>];
 
 for (members = [], i = 0; i < hosts.length; i++) {
   members[i] = {_id: i, host: hosts[i]}
