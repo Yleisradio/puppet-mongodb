@@ -25,13 +25,21 @@ define mongodb::backup::job (
       content => template('mongodb/automongobackup.sh.erb');
   }
 
+  exec { "make_backup_dir":
+    command => "/bin/mkdir -p ${backupdir}",
+    owner   => $mongodb::params::run_as_user,
+    group   => $mongodb::params::run_as_group,
+    creates => "${backupdir}",
+    require => Anchor['mongodb::install::end'];
+  }
+
   file {
     "${backupdir}":
       ensure  => 'directory',
       owner   => $mongodb::params::run_as_user,
       group   => $mongodb::params::run_as_group,
       mode    => '0755',
-      require => Anchor['mongodb::install::end'];
+      require => exec['make_backup_dir'];
   }
 
   cron { "${replica_set_name}-backup":
