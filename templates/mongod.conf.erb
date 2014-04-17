@@ -5,7 +5,8 @@ dbpath=<%= scope.lookupvar('mongodb::dbdir') %>/mongod_<%= @mongod_instance %>
 
 pidfilepath=<%= scope.lookupvar('mongodb::pidfilepath') %>/mongod_<%= @mongod_instance %>/mongod.pid
 
-logpath=<%= scope.lookupvar('mongodb::logdir') %>/mongod_<%= @mongod_instance %>.log
+# logpath=<%= scope.lookupvar('mongodb::logdir') %>/mongod_<%= @mongod_instance %>.log
+syslog=true
 
 logappend=<%= @mongod_logappend %>
 
