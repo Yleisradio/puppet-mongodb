@@ -32,17 +32,26 @@ class mongodb::params {
         redhat  => 'mongod',
     }
 
-    $version = '2.4.8'
-
     # directorypath to store db directory in
     # subdirectories for each mongo instance will be created
-    # $dbdir = '/var/lib'
+
+    $dbdir = '/var/lib'
 
     # numbers of files (days) to keep by logrotate
 
     $logrotatenumber = 7
 
-    $homedir = "/opt/mongodb"
+    # package version / installed / absent
+
+    $package_ensure = 'installed'
+
+    # should this module manage the mongodb repository from upstream?
+
+    $repo_manage = true
+
+    # should this module manage the logrotate package?
+
+    $logrotate_package_manage = true
 
     # directory for mongo logfiles
 
@@ -51,7 +60,8 @@ class mongodb::params {
         redhat  => '/var/log/mongo',
     }
 
-    # specify ulimit - 64000 is recommended setting from mongodb manual/administration/ulimit
+    # specify ulimit - nofile = 64000 and nproc = 32000 is recommended setting from
+    # http://docs.mongodb.org/manual/reference/ulimit/#recommended-settings
 
     $ulimit_nofiles = 64000
 }

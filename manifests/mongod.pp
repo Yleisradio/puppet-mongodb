@@ -14,7 +14,7 @@ define mongodb::mongod (
     $mongod_auth = false,
     $mongod_useauth = false,
     $mongod_monit = false,
-    $mongod_add_options = ''
+    $mongod_add_options = []
 ) {
 
     # REVIEW: if not included specs won't get variables from the class, exp: $mongodb::params::homedir = null
