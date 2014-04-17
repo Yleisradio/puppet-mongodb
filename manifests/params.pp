@@ -64,4 +64,8 @@ class mongodb::params {
     # http://docs.mongodb.org/manual/reference/ulimit/#recommended-settings
 
     $ulimit_nofiles = 64000
+
+    # specify pidfilepath
+
+    $pidfilepath = $dbdir
 }
