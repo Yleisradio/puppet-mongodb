@@ -35,7 +35,7 @@ class mongodb::params {
     # directorypath to store db directory in
     # subdirectories for each mongo instance will be created
 
-    $dbdir = '/var/lib'
+    $dbdir = '/opt/mongodb'
 
     # numbers of files (days) to keep by logrotate
 
