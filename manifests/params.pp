@@ -8,12 +8,12 @@ class mongodb::params {
     }
 
     $server_pkg_name = $::osfamily ? {
-        debian  => 'mongodb-10gen',
-        redhat  => 'mongo-10gen-server',
+        debian  => 'mongodb-org',
+        redhat  => 'mongodb-org',
     }
 
     $old_server_pkg_name = $::osfamily ? {
-        debian  => 'mongodb-stable',
+        debian  => 'mongodb-10gen',
         redhat  => 'mongodb-server',
     }
 
@@ -23,7 +23,7 @@ class mongodb::params {
     }
 
     $run_as_user = $::osfamily ? {
-        debian  => 'mongodb',
+        debian  => 'mongod',
         redhat  => 'mongod',
     }
 

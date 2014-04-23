@@ -21,14 +21,14 @@ class mongodb::install (
         ]
     }
 
-    package { 'mongodb-stable':
+    package { 'mongodb-10gen':
         ensure  => absent,
         name    => $::mongodb::params::old_server_pkg_name,
         require => Anchor['mongodb::install::begin'],
         before  => Anchor['mongodb::install::end']
     }
 
-    package { 'mongodb-10gen':
+    package { 'mongodb-org':
         ensure  => $package_ensure,
         name    => $::mongodb::params::server_pkg_name,
         require => $mongodb_10gen_package_require,
