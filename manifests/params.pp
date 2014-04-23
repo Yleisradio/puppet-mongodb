@@ -23,13 +23,13 @@ class mongodb::params {
     }
 
     $run_as_user = $::osfamily ? {
-        debian  => 'mongod',
-        redhat  => 'mongod',
+        debian  => 'mongodb',
+        redhat  => 'mongodb',
     }
 
     $run_as_group = $::osfamily ? {
         debian  => 'mongodb',
-        redhat  => 'mongod',
+        redhat  => 'mongodb',
     }
 
     # directorypath to store db directory in
