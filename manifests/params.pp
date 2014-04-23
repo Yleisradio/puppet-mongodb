@@ -8,8 +8,8 @@ class mongodb::params {
     }
 
     $server_pkg_name = $::osfamily ? {
-        debian  => 'mongodb-org',
-        redhat  => 'mongodb-org',
+        debian  => ['mongodb-org-server','mongodb-org-shell','mongodb-org-tools'],
+        redhat  => ['mongodb-org-server','mongodb-org-shell','mongodb-org-tools'],
     }
 
     $old_server_pkg_name = $::osfamily ? {

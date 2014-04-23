@@ -28,9 +28,8 @@ class mongodb::install (
         before  => Anchor['mongodb::install::end']
     }
 
-    package { 'mongodb-org':
+     package { $::mongodb::params::server_pkg_name:
         ensure  => $package_ensure,
-        name    => $::mongodb::params::server_pkg_name,
         require => $mongodb_10gen_package_require,
         before  => Anchor['mongodb::install::end']
     }
