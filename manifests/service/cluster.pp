@@ -6,8 +6,11 @@ class mongodb::service::cluster (
   $replica_set_name,
   $replica_set_hosts,
   $mongodb_options = [],
+  $mongodb_version = '2.6.0'
 ) {
-  include ::mongodb
+  class { mongodb:
+    package_ensure    => $mongodb_version,
+  }
 
   # http://docs.mongodb.org/master/reference/configuration-options/
   mongodb::mongod {

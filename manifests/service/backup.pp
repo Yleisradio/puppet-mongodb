@@ -9,7 +9,9 @@ class mongodb::service::backup (
   $backup_dir = "/opt/mongo_backups",
   $database_name = undef,
   $mongodb_options = ["diaglog=1"],
+  $mongodb_version = '2.6.0'
 ) {
+
 
   if $database_name {
     $backup_database_name = $database_name
@@ -17,7 +19,9 @@ class mongodb::service::backup (
     $backup_database_name = $replica_set_name
   }
 
-  include ::mongodb
+  class { mongodb:
+    package_ensure    => $mongodb_version,
+  }
 
   # http://docs.mongodb.org/master/reference/configuration-options/
   mongodb::mongod {
