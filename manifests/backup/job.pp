@@ -27,8 +27,6 @@ define mongodb::backup::job (
 
   exec { "make_backup_dir":
     command => "/bin/mkdir -p ${backupdir}",
-    owner   => $mongodb::params::run_as_user,
-    group   => $mongodb::params::run_as_group,
     creates => "${backupdir}",
     require => Anchor['mongodb::install::end'];
   }
