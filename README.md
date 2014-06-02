@@ -23,24 +23,6 @@
 
 This module installs and makes basic configs for mongodb. That includes mongod and mongos.
 
-### Works for
-
-RHEL/CentOS 6+
-Debian 6+
-Ubuntu 10.04 and newer
-
-### Requirements
-
-#### Modules needed:
-
-puppetlabs-stdlib ( https://github.com/puppetlabs/puppetlabs-stdlib )
-puppetlabs-apt ( https://github.com/puppetlabs/puppetlabs-apt ) only for Debian/Ubuntu
-
-#### Software versions needed:
-facter > 1.6.2
-puppet > 2.6.2
-
-
 ##Module Description
 
 [MongoDB](http://www.mongodb.org/), is an open-source document database, and the leading NoSQL database.
