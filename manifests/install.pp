@@ -2,8 +2,8 @@
 #
 #
 class mongodb::install (
-  $package_ensure = 'installed',
-  $repo_manage    = true
+  $repo_manage    = true,
+  $package_version = undef
 ) {
 
     anchor { 'mongodb::install::begin': }
@@ -21,17 +21,35 @@ class mongodb::install (
         ]
     }
 
-    package { 'mongodb-10gen':
+    if ($package_version == undef ) {
+      $package_ensure = $::mongodb::package_ensure
+    } else {
+      $package_ensure = $::osfamily ? {
+        redhat => "$package_version-mongodb_1",
+        debian => "$package_version",
+      }
+    }
+
+    package { 'mongodb-stable':
         ensure  => absent,
         name    => $::mongodb::params::old_server_pkg_name,
         require => Anchor['mongodb::install::begin'],
         before  => Anchor['mongodb::install::end']
     }
 
-     package { $::mongodb::params::server_pkg_name:
+    package { 'mongodb-10gen':
         ensure  => $package_ensure,
+        name    => $::mongodb::params::mongodb_pkg_name,
         require => $mongodb_10gen_package_require,
         before  => Anchor['mongodb::install::end']
     }
 
+  if ($::osfamily == 'redhat') {
+    package { 'mongodb-10gen-server':
+        ensure  => $package_ensure,
+        name    => $::mongodb::params::server_pkg_name,
+        require => $mongodb_10gen_package_require,
+        before  => Anchor['mongodb::install::end']
+    }
+  }
 }
