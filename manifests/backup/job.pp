@@ -31,13 +31,15 @@ define mongodb::backup::job (
     require => Anchor['mongodb::install::end'];
   }
 
-  file {
-    "${backupdir}":
-      ensure  => 'directory',
-      owner   => $mongodb::params::run_as_user,
-      group   => $mongodb::params::run_as_group,
-      mode    => '0755',
-      require => exec['make_backup_dir'];
+  unless defined(File[$backupdir]) {
+    file {
+      "${backupdir}":
+        ensure  => 'directory',
+        owner   => $mongodb::params::run_as_user,
+        group   => $mongodb::params::run_as_group,
+        mode    => '0755',
+        require => exec['make_backup_dir'];
+    }
   }
 
   cron { "${replica_set_name}-backup":
