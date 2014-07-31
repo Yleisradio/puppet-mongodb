@@ -32,7 +32,7 @@ class mongodb::params {
         redhat  => 'mongod',
     }
 
-    $version = '2.4.8'
+    $version = '2.4.10'
 
     # directorypath to store db directory in
     # subdirectories for each mongo instance will be created
